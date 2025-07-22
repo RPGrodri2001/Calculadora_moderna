@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de RPG ❤</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .calculator {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 380px;
+            width: 100%;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 25px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .memory-display {
+            background: rgba(0, 0, 0, 0.3);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .display-container {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .display {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 36px;
+            font-weight: 600;
+            text-align: right;
+            width: 100%;
+            outline: none;
+            font-family: 'Courier New', monospace;
+        }
+
+        .display::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-number {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-number:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .btn-operator {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-operator:hover {
+            background: linear-gradient(135deg, #5a6fd8, #6a4190);
+        }
+
+        .btn-equals {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+            color: white;
+            font-weight: 700;
+            grid-column: span 4;
+        }
+
+        .btn-equals:hover {
+            background: linear-gradient(135deg, #e85a9b, #d4c441);
+        }
+
+        .btn-clear {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: linear-gradient(135deg, #ff5252, #e53935);
+        }
+
+        .btn-memory {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            font-size: 14px;
+        }
+
+        .btn-memory:hover {
+            background: linear-gradient(135deg, #3d8bfe, #00d4fe);
+        }
+
+        .btn-zero {
+            grid-column: span 2;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .calculator {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .btn {
+                padding: 15px;
+                font-size: 16px;
+            }
+            
+            .display {
+                font-size: 28px;
+            }
+            
+            .title {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            .btn-memory {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1 class="title">Calculadora de RPG ❤</h1>
+        
+        <div class="memory-display" id="memoryDisplay">
+            Memoria: 0
+        </div>
+        
+        <div class="display-container">
+            <input type="text" class="display" id="display" value="0" readonly>
+        </div>
+
+        <div class="buttons">
+            <!-- Fila 1: Memoria -->
+            <button class="btn btn-memory" onclick="clearMemory()">MC</button>
+            <button class="btn btn-memory" onclick="recallMemory()">MR</button>
+            <button class="btn btn-memory" onclick="addToMemory()">M+</button>
+            <button class="btn btn-memory" onclick="subtractFromMemory()">M-</button>
+
+            <!-- Fila 2: Funciones -->
+            <button class="btn btn-operator" onclick="sqrt()">√</button>
+            <button class="btn btn-operator" onclick="power()">x²</button>
+            <button class="btn btn-operator" onclick="percentage()">%</button>
+            <button class="btn btn-clear" onclick="clearDisplay()">C</button>
+
+            <!-- Fila 3 -->
+            <button class="btn btn-number" onclick="appendNumber('7')">7</button>
+            <button class="btn btn-number" onclick="appendNumber('8')">8</button>
+            <button class="btn btn-number" onclick="appendNumber('9')">9</button>
+            <button class="btn btn-operator" onclick="setOperator('÷')">÷</button>
+
+            <!-- Fila 4 -->
+            <button class="btn btn-number" onclick="appendNumber('4')">4</button>
+            <button class="btn btn-number" onclick="appendNumber('5')">5</button>
+            <button class="btn btn-number" onclick="appendNumber('6')">6</button>
+            <button class="btn btn-operator" onclick="setOperator('×')">×</button>
+
+            <!-- Fila 5 -->
+            <button class="btn btn-number" onclick="appendNumber('1')">1</button>
+            <button class="btn btn-number" onclick="appendNumber('2')">2</button>
+            <button class="btn btn-number" onclick="appendNumber('3')">3</button>
+            <button class="btn btn-operator" onclick="setOperator('-')">-</button>
+
+            <!-- Fila 6 -->
+            <button class="btn btn-number btn-zero" onclick="appendNumber('0')">0</button>
+            <button class="btn btn-number" onclick="appendDecimal()">.</button>
+            <button class="btn btn-operator" onclick="setOperator('+')">+</button>
+
+            <!-- Fila 7 -->
+            <button class="btn btn-equals" onclick="calculate()">=</button>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentInput = '0';
+        let previousInput = null;
+        let operator = null;
+        let waitingForOperand = false;
+        let memory = 0;
+
+        // Referencias al DOM
+        const display = document.getElementById('display');
+        const memoryDisplay = document.getElementById('memoryDisplay');
+
+        // Actualizar pantalla
+        function updateDisplay() {
+            display.value = currentInput;
+            memoryDisplay.textContent = `Memoria: ${memory}`;
+        }
+
+        // Añadir número
+        function appendNumber(number) {
+            if (waitingForOperand) {
+                currentInput = number;
+                waitingForOperand = false;
+            } else {
+                currentInput = currentInput === '0' ? number : currentInput + number;
+            }
+            updateDisplay();
+        }
+
+        // Añadir decimal
+        function appendDecimal() {
+            if (waitingForOperand) {
+                currentInput = '0.';
+                waitingForOperand = false;
+            } else if (currentInput.indexOf('.') === -1) {
+                currentInput += '.';
+            }
+            updateDisplay();
+        }
+
+        // Establecer operador
+        function setOperator(nextOperator) {
+            const inputValue = parseFloat(currentInput);
+
+            if (previousInput === null) {
+                previousInput = inputValue;
+            } else if (operator) {
+                const currentValue = previousInput || 0;
+                const newValue = performCalculation(currentValue, inputValue, operator);
+
+                currentInput = String(newValue);
+                previousInput = newValue;
+                updateDisplay();
+            }
+
+            waitingForOperand = true;
+            operator = nextOperator;
+        }
+
+        // Calcular resultado
+        function calculate() {
+            if (operator && previousInput !== null && !waitingForOperand) {
+                const inputValue = parseFloat(currentInput);
+                const newValue = performCalculation(previousInput, inputValue, operator);
+                
+                currentInput = String(newValue);
+                previousInput = null;
+                operator = null;
+                waitingForOperand = true;
+                updateDisplay();
+            }
+        }
+
+        // Realizar cálculo
+        function performCalculation(firstOperand, secondOperand, operation) {
+            switch (operation) {
+                case '+':
+                    return firstOperand + secondOperand;
+                case '-':
+                    return firstOperand - secondOperand;
+                case '×':
+                    return firstOperand * secondOperand;
+                case '÷':
+                    if (secondOperand === 0) {
+                        alert('Error: División por cero');
+                        return firstOperand;
+                    }
+                    return firstOperand / secondOperand;
+                default:
+                    return secondOperand;
+            }
+        }
+
+        // Limpiar pantalla
+        function clearDisplay() {
+            currentInput = '0';
+            previousInput = null;
+            operator = null;
+            waitingForOperand = false;
+            updateDisplay();
+        }
+
+        // Raíz cuadrada
+        function sqrt() {
+            const value = parseFloat(currentInput);
+            if (value < 0) {
+                alert('Error: Raíz cuadrada de número negativo');
+                return;
+            }
+            currentInput = String(Math.sqrt(value));
+            waitingForOperand = true;
+            updateDisplay();
+        }
+
+        // Elevar al cuadrado
+        function power() {
+            const value = parseFloat(currentInput);
+            currentInput = String(value * value);
+            waitingForOperand = true;
+            updateDisplay();
+        }
+
+        // Porcentaje
+        function percentage() {
+            const value = parseFloat(currentInput);
+            currentInput = String(value / 100);
+            waitingForOperand = true;
+            updateDisplay();
+        }
+
+        // Funciones de memoria
+        function clearMemory() {
+            memory = 0;
+            updateDisplay();
+        }
+
+        function recallMemory() {
+            currentInput = String(memory);
+            waitingForOperand = true;
+            updateDisplay();
+        }
+
+        function addToMemory() {
+            memory += parseFloat(currentInput);
+            updateDisplay();
+        }
+
+        function subtractFromMemory() {
+            memory -= parseFloat(currentInput);
+            updateDisplay();
+        }
+
+        // Soporte para teclado
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            
+            if (key >= '0' && key <= '9') {
+                appendNumber(key);
+            } else if (key === '.') {
+                appendDecimal();
+            } else if (key === '+') {
+                setOperator('+');
+            } else if (key === '-') {
+                setOperator('-');
+            } else if (key === '*') {
+                setOperator('×');
+            } else if (key === '/') {
+                event.preventDefault();
+                setOperator('÷');
+            } else if (key === 'Enter' || key === '=') {
+                calculate();
+            } else if (key === 'Escape' || key.toLowerCase() === 'c') {
+                clearDisplay();
+            } else if (key === 'Backspace') {
+                if (currentInput.length > 1) {
+                    currentInput = currentInput.slice(0, -1);
+                } else {
+                    currentInput = '0';
+                }
+                updateDisplay();
+            }
+        });
+
+        // Inicializar
+        updateDisplay();
+    </script>
+</body>
+</html>
