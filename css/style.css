@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: url('../imagen/fondo1.png') no-repeat center center fixed;
+    background: url('../imagen/fondo2.png') no-repeat center center fixed;
     background-size: cover;
     min-height: 100vh;
     display: flex;
