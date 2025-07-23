@@ -3,158 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/style.css">
     <title>Calculadora de RPG ❤</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+    
+    <!-- CSS crítico inline para carga instantánea -->
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #E6E6FA;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .calculator {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 32px 28px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            max-width: 400px;
+            width: 100%;
+        }
+        .loading { color: #667eea; text-align: center; }
+    </style>
+    
+    <!-- Precargar fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
     <div class="calculator">
-        <h1 class="title">Calculadora de RPG ❤</h1>
-        <p class="subtitle">Fácil, rápida y profesional</p>
-        
-        <div class="memory-section">
-            <div class="memory-display" id="memoryDisplay">Memoria: 0</div>
-            <div class="memory-indicator" id="memoryIndicator"></div>
-        </div>
-        
-        <div class="display-container">
-            <div class="operation-display" id="operationDisplay"></div>
-            <input type="text" class="display" id="display" value="0" readonly>
-        </div>
-
-        <div class="buttons">
-            <!-- Fila 1: Memoria (con tooltips) -->
-            <button class="btn btn-memory" onclick="clearMemory()" data-tooltip="Limpiar memoria">MC</button>
-            <button class="btn btn-memory" onclick="recallMemory()" data-tooltip="Recuperar memoria">MR</button>
-            <button class="btn btn-memory" onclick="addToMemory()" data-tooltip="Sumar a memoria">M+</button>
-            <button class="btn btn-memory" onclick="subtractFromMemory()" data-tooltip="Restar de memoria">M-</button>
-
-            <!-- Fila 2: Funciones -->
-            <button class="btn btn-function" onclick="sqrt()" data-tooltip="Raíz cuadrada">√</button>
-            <button class="btn btn-function" onclick="power()" data-tooltip="Elevar al cuadrado">x²</button>
-            <button class="btn btn-function" onclick="percentage()" data-tooltip="Porcentaje">%</button>
-            <button class="btn btn-clear" onclick="clearDisplay()" data-tooltip="Limpiar todo">C</button>
-
-            <!-- Fila 3 -->
-            <button class="btn btn-number" onclick="appendNumber('7')">7</button>
-            <button class="btn btn-number" onclick="appendNumber('8')">8</button>
-            <button class="btn btn-number" onclick="appendNumber('9')">9</button>
-            <button class="btn btn-operator" onclick="setOperator('÷')" data-tooltip="Dividir">÷</button>
-
-            <!-- Fila 4 -->
-            <button class="btn btn-number" onclick="appendNumber('4')">4</button>
-            <button class="btn btn-number" onclick="appendNumber('5')">5</button>
-            <button class="btn btn-number" onclick="appendNumber('6')">6</button>
-            <button class="btn btn-operator" onclick="setOperator('×')" data-tooltip="Multiplicar">×</button>
-
-            <!-- Fila 5 -->
-            <button class="btn btn-number" onclick="appendNumber('1')">1</button>
-            <button class="btn btn-number" onclick="appendNumber('2')">2</button>
-            <button class="btn btn-number" onclick="appendNumber('3')">3</button>
-            <button class="btn btn-operator" onclick="setOperator('-')" data-tooltip="Restar">-</button>
-
-            <!-- Fila 6 -->
-            <button class="btn btn-number btn-zero" onclick="appendNumber('0')">0</button>
-            <button class="btn btn-number" onclick="appendDecimal()" data-tooltip="Punto decimal">.</button>
-            <button class="btn btn-operator" onclick="setOperator('+')" data-tooltip="Sumar">+</button>
-
-            <!-- Fila 7 -->
-            <button class="btn btn-equals" onclick="calculate()" data-tooltip="Calcular resultado">=</button>
-        </div>
+        <div class="loading">Cargando Calculadora RPG ❤...</div>
     </div>
 
-    <!-- Botón de Ayuda -->
-    <button class="help-button" onclick="toggleHelp()" title="Ayuda y guía de uso">
-        ?
-    </button>
-
-    <!-- Modal de Ayuda -->
-    <div class="help-modal" id="helpModal">
-        <div class="help-content">
-            <div class="help-header">
-                <h2 class="help-title">📚 Guía de la Calculadora</h2>
-                <button class="close-button" onclick="toggleHelp()">×</button>
-            </div>
-
-            <div class="help-section">
-                <h3>🧠 Funciones de Memoria</h3>
-                <div class="memory-grid">
-                    <div class="memory-item">
-                        <div class="memory-button">MC</div>
-                        <div class="memory-text">Limpiar memoria</div>
-                    </div>
-                    <div class="memory-item">
-                        <div class="memory-button">MR</div>
-                        <div class="memory-text">Recuperar memoria</div>
-                    </div>
-                    <div class="memory-item">
-                        <div class="memory-button">M+</div>
-                        <div class="memory-text">Sumar a memoria</div>
-                    </div>
-                    <div class="memory-item">
-                        <div class="memory-button">M-</div>
-                        <div class="memory-text">Restar de memoria</div>
-                    </div>
-                </div>
-                <p style="font-size: 13px; color: #64748b; font-style: italic;">
-                    💡 La memoria te permite guardar números para usarlos después en otros cálculos.
-                </p>
-            </div>
-
-            <div class="help-section">
-                <h3>🔧 Funciones Especiales</h3>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px;">
-                    <div style="text-align: center; padding: 8px; background: #fef3c7; border-radius: 8px;">
-                        <div style="font-weight: 600; color: #92400e;">√</div>
-                        <div style="font-size: 12px; color: #78350f;">Raíz cuadrada</div>
-                    </div>
-                    <div style="text-align: center; padding: 8px; background: #fef3c7; border-radius: 8px;">
-                        <div style="font-weight: 600; color: #92400e;">x²</div>
-                        <div style="font-size: 12px; color: #78350f;">Al cuadrado</div>
-                    </div>
-                    <div style="text-align: center; padding: 8px; background: #fef3c7; border-radius: 8px;">
-                        <div style="font-weight: 600; color: #92400e;">%</div>
-                        <div style="font-size: 12px; color: #78350f;">Porcentaje</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="help-section">
-                <h3>⌨️ Atajos de Teclado</h3>
-                <div class="keyboard-shortcuts">
-                    <div class="shortcut-item">
-                        <span class="shortcut-desc">Números</span>
-                        <span class="shortcut-key">0-9</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <span class="shortcut-desc">Operaciones básicas</span>
-                        <span class="shortcut-key">+ - * /</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <span class="shortcut-desc">Calcular</span>
-                        <span class="shortcut-key">Enter</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <span class="shortcut-desc">Limpiar</span>
-                        <span class="shortcut-key">Esc</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <span class="shortcut-desc">Borrar último</span>
-                        <span class="shortcut-key">Backspace</span>
-                    </div>
-                </div>
-            </div>
-
-            <div style="background: linear-gradient(135deg, #e0f2fe, #b3e5fc); padding: 12px; border-radius: 10px; text-align: center; margin-top: 15px;">
-                <div style="font-size: 14px; color: #0277bd; font-weight: 600;">
-                    🎮 ¡Calculadora RPG lista para la aventura! ❤
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+    <!-- CSS completo - carga sin bloquear -->
+    <link rel="stylesheet" href="./css/style.css" media="print" onload="this.media='all'">
+    
+    <!-- Fuentes - carga sin bloquear -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    
+    <!-- JavaScript - defer para no bloquear -->
+    <script src="./js/main.js" defer></script>
 </body>
-<script src="./js/main.js"></script>
 </html>
